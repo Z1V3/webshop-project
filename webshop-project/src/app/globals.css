@@ -2,19 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+}
+
+@layer utilities {
+  .container{
+    @apply max-w-[90vw] sm:overflow-clip md:overflow-visible
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/*
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #2b2b2b;
     --foreground: #ededed;
   }
 }
+*/
 
-body {
+body, html {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
