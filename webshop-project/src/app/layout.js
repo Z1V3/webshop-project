@@ -7,8 +7,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`antialiased`}>
         <Header />
-        {children}
-        <Footer />
+        <div className="flex flex-col min-h-screen">
+            <main className="flex-grow">{children}</main>
+            <Footer />
+        </div>
       </body>
     </html>
   );
