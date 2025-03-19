@@ -20,4 +20,6 @@ public partial class UserPayment
     public string? CardholderName { get; set; }
 
     public bool? IsDefault { get; set; }
+
+    public virtual ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
 }

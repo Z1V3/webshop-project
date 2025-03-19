@@ -9,13 +9,15 @@ public partial class UserAddress
 
     public int UserId { get; set; }
 
-    public string? AddressLine { get; set; }
+    public string AddressLine { get; set; } = null!;
 
-    public string? City { get; set; }
+    public string City { get; set; } = null!;
 
-    public string? PostalCode { get; set; }
+    public string PostalCode { get; set; } = null!;
 
-    public string? Country { get; set; }
+    public string Country { get; set; } = null!;
 
-    public string? Phone { get; set; }
+    public string Phone { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
 }

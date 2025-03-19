@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebshopAPI.Models;
 
-public partial class AppDbContext : DbContext
+public partial class WebShopDbContext : DbContext
 {
-    public AppDbContext()
+    public WebShopDbContext()
     {
     }
 
-    public AppDbContext(DbContextOptions<AppDbContext> options)
+    public WebShopDbContext(DbContextOptions<WebShopDbContext> options)
         : base(options)
     {
     }
@@ -33,9 +33,6 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=WebShopDB;User Id=sa;Password=root;TrustServerCertificate=yes");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderDetail>(entity =>
@@ -54,11 +51,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.OrderItemsId);
+            entity.HasKey(e => e.OrderItemId);
 
             entity.ToTable("OrderItem");
 
-            entity.Property(e => e.OrderItemsId).HasColumnName("order_items_id");
+            entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
@@ -66,9 +63,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PaymentDetail>(entity =>
         {
-            entity.HasKey(e => e.PaymentDetailsId);
+            entity.HasKey(e => e.PaymentId);
 
-            entity.Property(e => e.PaymentDetailsId).HasColumnName("payment_details_id");
+            entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(7, 2)")
                 .HasColumnName("amount");
@@ -106,6 +103,10 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("description");
             entity.Property(e => e.Discount).HasColumnName("discount");
+            entity.Property(e => e.ImagePath)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("image_path");
             entity.Property(e => e.ModifiedAt)
                 .HasDefaultValueSql("(NULL)")
                 .HasColumnName("modified_at");

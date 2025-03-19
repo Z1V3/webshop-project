@@ -13,9 +13,9 @@ namespace WebshopAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly WebShopDbContext _context;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(WebShopDbContext context)
         {
             _context = context;
         }

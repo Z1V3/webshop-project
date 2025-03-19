@@ -17,9 +17,15 @@ public partial class User
 
     public string? Phone { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public DateTime? ModifiedAt { get; set; }
 
-    public int? UserRoleId { get; set; }
+    public int UserRoleId { get; set; }
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+    public virtual ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
+
+    public virtual UserRole UserRole { get; set; } = null!;
 }
