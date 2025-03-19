@@ -1,28 +1,43 @@
 import grainImage from "@/assets/images/grain.jpg";
+import Link from "next/link";
 
-export const ProductCard = ({ name, imagePath, price, description, children }) => {
+export const ProductCard = ({
+  id,
+  name,
+  imagePath = "/default-picture.jpg",
+  price,
+  children,
+}) => {
+  const handleImageError = (event) => {
+    event.target.src = "/default-picture.jpg";
+  };
+
   return (
-    <div className="bg-zinc-200 relative z-0 overflow-hidden after:z-10 after:content-[''] after:absolute after:inset-0 after:outline-2 after:outline after:-outline-offset-2 after:outline-white/20 after:pointer-events-none">
-      <div
-        className="absolute inset-0 -z-10 opacity-5"
-        style={{
-          backgroundImage: `url(${grainImage.src})`,
-        }}
-      ></div>
+    <Link href={`/product/${id}`} className="hover:scale-95 duration-100">
+      <div className="bg-[#363636]/95 p-2 sm:rounded-md md:rounded-lg text-white">
+        <div className="bg-[#f0faff]/20 rounded-lg relative z-0 overflow-hidden w-full">
+          <div
+            className="absolute inset-0 -z-10 opacity-5"
+            style={{
+              backgroundImage: `url(${grainImage.src})`,
+            }}
+          ></div>
 
-      <div className="p-4">
-        {imagePath && (
-          <img
-            src={imagePath}
-            alt={name}
-            className="w-full h-48 object-cover rounded-md mb-4"
-          />
-        )}
-        {name && <h2 className="text-xl font-semibold text-white mb-2">{name}</h2>}
-        {price && <p className="text-lg text-green-400 mb-2">${price}</p>}
-        {description && <p className="text-gray-300 mb-4">{description}</p>}
+          <div className="p-4">
+            {imagePath && (
+              <img
+                src={imagePath}
+                alt={name}
+                className="object-contain w-full sm:rounded-sm md:rounded-md mb-2 object-center"
+                onError={handleImageError}
+              />
+            )}
+          </div>
+        </div>
+        {name && <h2 className="text-xl font-thin mb-2 mt-1 ml-5">{name}</h2>}
+        {price && <p className="text-lg font-bold mb-2 ml-5">{price} €</p>}
         {children}
       </div>
-    </div>
+    </Link>
   );
 };

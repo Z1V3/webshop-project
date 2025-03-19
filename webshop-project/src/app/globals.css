@@ -8,7 +8,7 @@
 
 @layer utilities {
   .container{
-    @apply max-w-[90vw] sm:overflow-clip md:overflow-visible
+    @apply max-w-[80vw] sm:overflow-clip md:overflow-visible
   }
 }
 
@@ -29,5 +29,36 @@
 body, html {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: LEMONMILK, Arial, Helvetica, sans-serif;
+  font-weight: 300;
+  scrollbar-width: none; /* Firefox */
+}
+
+@font-face {
+  font-family: 'LEMONMILK';
+  src: url('/fonts/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LEMONMILK';
+  src: url('/fonts/LEMONMILK-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LEMONMILK';
+  src: url('/fonts/LEMONMILK-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LEMONMILK';
+  src: url('/fonts/LEMONMILK-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }

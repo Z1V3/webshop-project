@@ -19,6 +19,9 @@ export default {
   		}
   	},
     extend: {
+      fontFamily: {
+        'lemonmilk': ['LEMONMILK', 'sans-serif'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

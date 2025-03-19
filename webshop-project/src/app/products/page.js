@@ -1,6 +1,9 @@
 "use client";
 
+import { FilterBar } from "@/components/filter/FilterBar";
+import { FilterSlide } from "@/components/filter/FilterSlide";
 import { ProductCard } from "@/components/ProductCard";
+
 import { useEffect, useState } from "react";
 
 export default function Products() {
@@ -29,21 +32,25 @@ export default function Products() {
   }
 
   return (
-    <div className="container">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10">
-        {products.map((product) => (
-          <ProductCard
-            key={product.productId}
-            name={product.name}
-            //imagePath={product.imagePath}
-            price={product.price}
-            description={product.description}
-          >
-            <button className="bg-blue-500 text-white py-2 px-4 rounded">
-              Add to Cart
-            </button>
-          </ProductCard>
-        ))}
+    <div className="max-w-[100vw]">
+      <FilterBar className="w-[1600px]" />
+
+      <div className="container relative lg:px-64 flex">
+        <div className="relative z-10 flex-1 md:overflow-hidden lg:overflow-hidden">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 sm:gap-16 md:gap-x-8 md:gap-y-24 mt-10">
+            {products.map((product) => (
+              <ProductCard
+                key={product.productId}
+                id={product.productId}
+                name={product.name}
+                imagePath={product.imagePath}
+                price={product.price}
+              />
+            ))}
+          </div>
+        </div>
+
+        <FilterSlide className="ml-8 sm:hidden md:block" />
       </div>
     </div>
   );
