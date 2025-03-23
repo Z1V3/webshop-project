@@ -1,35 +1,33 @@
 "use client";
 import { ActionButton } from "@/components/ActionButton";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+  const handleCredentialsLogin = async (event) => {
+    event.preventDefault();
+    setError("");
 
-    // TODO: Implement login logic here, e.g.,
-    // try {
-    //   const response = await fetch('/api/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ email, password }),
-    //   });
-    //   const data = await response.json();
-    //   if (response.ok) {
-    //     // Handle successful login (e.g., redirect, store token)
-    //     console.log("Login successful", data);
-    //   } else {
-    //     // Handle login error (e.g., display error message)
-    //     console.error("Login failed", data);
-    //   }
-    // } catch (error) {
-    //   console.error("Error during login:", error);
-    //   // Handle network or other errors
-    // }
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+      callbackUrl: "/",
+    });
+
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      window.location.href = "/";
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    await signIn("google", { callbackUrl: "/" });
   };
 
   return (
@@ -38,7 +36,19 @@ export default function Login() {
         <div className="mb-8">
           <h1 className="text-5xl">Login</h1>
         </div>
-        <form onSubmit={handleLogin} className="flex flex-col items-center gap-4 sm:w-[300px] md:w-[500px]">
+
+        <button
+          className="w-full sm:w-[300px] md:w-[500px] bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
+          onClick={handleGoogleLogin}
+        >
+          Sign in with Google
+        </button>
+
+        <div className="border-t border-gray-400 my-4 w-full sm:w-[300px] md:w-[500px]"></div>
+
+        <h3 className="text-lg font-semibold mb-2">Sign in with Credentials</h3>
+        <form onSubmit={handleCredentialsLogin} className="flex flex-col items-center gap-4 sm:w-[300px] md:w-[500px]">
+          {error && <p className="text-red-500">{error}</p>}
           <div className="w-full">
             <label htmlFor="email" className="block text-md font-medium text-gray-700">
               Email
@@ -46,10 +56,10 @@ export default function Login() {
             <input
               type="email"
               id="email"
-              className="mt-1 p-2 border rounded-md w-full"
+              className="font-sans text-lg mt-1 p-2 border rounded-md w-full"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required // Add basic HTML validation
+              required
             />
           </div>
           <div className="w-full">
@@ -62,7 +72,7 @@ export default function Login() {
               className="mt-1 p-2 border rounded-md w-full"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required // Add basic HTML validation
+              required
             />
           </div>
           <div className="flex sm:flex-col sm:gap-4 md:flex-row md:gap-16">
