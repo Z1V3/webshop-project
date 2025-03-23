@@ -13,9 +13,9 @@ namespace WebshopAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly WebShopDbContext _context;
+        private readonly WebShopDBContext _context;
 
-        public ProductsController(WebShopDbContext context)
+        public ProductsController(WebShopDBContext context)
         {
             _context = context;
         }
@@ -39,6 +39,33 @@ namespace WebshopAPI.Controllers
             }
 
             return product;
+        }
+
+        // GET: api/Products/Paintings
+        [HttpGet("Paintings")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetPaintings()
+        {
+            return await _context.Products
+                .Where(p => p.ProductTypeId == 1)
+                .ToListAsync();
+        }
+
+        // GET: api/Products/Decorations
+        [HttpGet("Decorations")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetDecorations()
+        {
+            return await _context.Products
+                .Where(p => p.ProductTypeId == 2)
+                .ToListAsync();
+        }
+
+        // GET: api/Products/Wearables
+        [HttpGet("Wearables")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetWearables()
+        {
+            return await _context.Products
+                .Where(p => p.ProductTypeId == 3)
+                .ToListAsync();
         }
 
         // PUT: api/Products/5
