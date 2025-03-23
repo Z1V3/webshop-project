@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebshopAPI.Models;
 
@@ -11,12 +10,10 @@ using WebshopAPI.Models;
 
 namespace WebshopAPI.Migrations
 {
-    [DbContext(typeof(WebShopDbContext))]
-    [Migration("20250313092421_AddImagePathColumn")]
-    partial class AddImagePathColumn
+    [DbContext(typeof(WebShopDBContext))]
+    partial class WebShopDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,9 +31,11 @@ namespace WebshopAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2")
@@ -46,7 +45,7 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("payment_id");
 
-                    b.Property<decimal?>("Total")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(7, 2)")
                         .HasColumnName("total");
 
@@ -56,17 +55,19 @@ namespace WebshopAPI.Migrations
 
                     b.HasKey("OrderId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("WebshopAPI.Models.OrderItem", b =>
                 {
-                    b.Property<int>("OrderItemsId")
+                    b.Property<int>("OrderItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("order_items_id");
+                        .HasColumnName("order_item_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int")
@@ -76,35 +77,41 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("product_id");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int")
                         .HasColumnName("quantity");
 
-                    b.HasKey("OrderItemsId");
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("WebshopAPI.Models.PaymentDetail", b =>
                 {
-                    b.Property<int>("PaymentDetailsId")
+                    b.Property<int>("PaymentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("payment_details_id");
+                        .HasColumnName("payment_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentDetailsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
-                    b.Property<decimal?>("Amount")
+                    b.Property<decimal>("Amount")
                         .HasColumnType("decimal(7, 2)")
                         .HasColumnName("amount");
 
                     b.Property<string>("AuthorizationCode")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("authorization_code");
 
                     b.Property<string>("Currency")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
@@ -114,17 +121,19 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order_id");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("payment_date");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("payment_status");
 
                     b.Property<string>("TransactionId")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
@@ -134,7 +143,11 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("user_payment_id");
 
-                    b.HasKey("PaymentDetailsId");
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserPaymentId");
 
                     b.ToTable("PaymentDetails");
                 });
@@ -148,13 +161,14 @@ namespace WebshopAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(2000)
                         .IsUnicode(false)
                         .HasColumnType("varchar(2000)")
@@ -164,6 +178,12 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("discount");
 
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(300)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("image_path");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -171,16 +191,17 @@ namespace WebshopAPI.Migrations
                         .HasDefaultValueSql("(NULL)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)")
                         .HasColumnName("name");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(7, 2)")
                         .HasColumnName("price");
 
-                    b.Property<int?>("ProductTypeId")
+                    b.Property<int>("ProductTypeId")
                         .HasColumnType("int")
                         .HasColumnName("product_type_id");
 
@@ -190,7 +211,7 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("varchar(12)")
                         .HasColumnName("SKU");
 
-                    b.Property<int?>("Stock")
+                    b.Property<int>("Stock")
                         .HasColumnType("int")
                         .HasColumnName("stock");
 
@@ -211,6 +232,7 @@ namespace WebshopAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductTypeId"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
@@ -231,9 +253,18 @@ namespace WebshopAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
@@ -263,7 +294,7 @@ namespace WebshopAPI.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
-                    b.Property<int?>("UserRoleId")
+                    b.Property<int>("UserRoleId")
                         .HasColumnType("int")
                         .HasColumnName("user_role_id");
 
@@ -274,6 +305,8 @@ namespace WebshopAPI.Migrations
                         .HasColumnName("username");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("UserRoleId");
 
                     b.ToTable("User", (string)null);
                 });
@@ -288,30 +321,35 @@ namespace WebshopAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
 
                     b.Property<string>("AddressLine")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)")
                         .HasColumnName("address_line");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(false)
                         .HasColumnType("varchar(200)")
                         .HasColumnName("city");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("country");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
@@ -322,6 +360,8 @@ namespace WebshopAPI.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("AddressId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAddress", (string)null);
                 });
@@ -396,19 +436,123 @@ namespace WebshopAPI.Migrations
                     b.ToTable("UserRole", (string)null);
                 });
 
+            modelBuilder.Entity("WebshopAPI.Models.OrderDetail", b =>
+                {
+                    b.HasOne("WebshopAPI.Models.User", "User")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderDetails_User");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.OrderItem", b =>
+                {
+                    b.HasOne("WebshopAPI.Models.OrderDetail", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderItem_OrderDetails");
+
+                    b.HasOne("WebshopAPI.Models.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderItem_Product");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.PaymentDetail", b =>
+                {
+                    b.HasOne("WebshopAPI.Models.OrderDetail", "Order")
+                        .WithMany("PaymentDetails")
+                        .HasForeignKey("OrderId")
+                        .IsRequired()
+                        .HasConstraintName("FK_PaymentDetails_OrderDetails");
+
+                    b.HasOne("WebshopAPI.Models.UserPayment", "UserPayment")
+                        .WithMany("PaymentDetails")
+                        .HasForeignKey("UserPaymentId")
+                        .IsRequired()
+                        .HasConstraintName("FK_PaymentDetails_UserPayment");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("UserPayment");
+                });
+
             modelBuilder.Entity("WebshopAPI.Models.Product", b =>
                 {
                     b.HasOne("WebshopAPI.Models.ProductType", "ProductType")
                         .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_product_producttype");
 
                     b.Navigation("ProductType");
                 });
 
+            modelBuilder.Entity("WebshopAPI.Models.User", b =>
+                {
+                    b.HasOne("WebshopAPI.Models.UserRole", "UserRole")
+                        .WithMany("Users")
+                        .HasForeignKey("UserRoleId")
+                        .IsRequired()
+                        .HasConstraintName("FK_User_UserRole");
+
+                    b.Navigation("UserRole");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.UserAddress", b =>
+                {
+                    b.HasOne("WebshopAPI.Models.User", "User")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_UserAddress_User");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.OrderDetail", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("PaymentDetails");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.Product", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("WebshopAPI.Models.ProductType", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.User", b =>
+                {
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("UserAddresses");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.UserPayment", b =>
+                {
+                    b.Navigation("PaymentDetails");
+                });
+
+            modelBuilder.Entity("WebshopAPI.Models.UserRole", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

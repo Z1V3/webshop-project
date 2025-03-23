@@ -23,6 +23,8 @@ public partial class User
 
     public int UserRoleId { get; set; }
 
+    public string Email { get; set; } = null!;
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();

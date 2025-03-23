@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebshopAPI.Models;
+using YourProjectName.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddSingleton<JwtTokenGenerator>();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -30,7 +33,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<WebShopDbContext>(options =>
+builder.Services.AddDbContext<WebShopDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 

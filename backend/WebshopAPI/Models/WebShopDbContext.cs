@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebshopAPI.Models;
 
-public partial class WebShopDbContext : DbContext
+public partial class WebShopDBContext : DbContext
 {
-    public WebShopDbContext()
+    public WebShopDBContext()
     {
     }
 
-    public WebShopDbContext(DbContextOptions<WebShopDbContext> options)
+    public WebShopDBContext(DbContextOptions<WebShopDBContext> options)
         : base(options)
     {
     }
@@ -40,25 +40,39 @@ public partial class WebShopDbContext : DbContext
             entity.HasKey(e => e.OrderId);
 
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnName("created_at");
             entity.Property(e => e.ModifiedAt).HasColumnName("modified_at");
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.Total)
                 .HasColumnType("decimal(7, 2)")
                 .HasColumnName("total");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderDetails_User");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.OrderItemId);
-
             entity.ToTable("OrderItem");
 
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_OrderItem_OrderDetails");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderItem_Product");
         });
 
         modelBuilder.Entity<PaymentDetail>(entity =>
@@ -88,6 +102,16 @@ public partial class WebShopDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("transaction_id");
             entity.Property(e => e.UserPaymentId).HasColumnName("user_payment_id");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.PaymentDetails)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentDetails_OrderDetails");
+
+            entity.HasOne(d => d.UserPayment).WithMany(p => p.PaymentDetails)
+                .HasForeignKey(d => d.UserPaymentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentDetails_UserPayment");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -147,7 +171,13 @@ public partial class WebShopDbContext : DbContext
             entity.ToTable("User");
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("email");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -170,6 +200,11 @@ public partial class WebShopDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("username");
+
+            entity.HasOne(d => d.UserRole).WithMany(p => p.Users)
+                .HasForeignKey(d => d.UserRoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_UserRole");
         });
 
         modelBuilder.Entity<UserAddress>(entity =>
@@ -200,6 +235,10 @@ public partial class WebShopDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("postal_code");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserAddresses)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserAddress_User");
         });
 
         modelBuilder.Entity<UserPayment>(entity =>
