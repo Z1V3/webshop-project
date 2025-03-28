@@ -3,7 +3,7 @@ import { FaArrowDown } from "react-icons/fa";
 
 export const FilterBar = ({ className }) => {
     return (
-        <div className={` text-slate-800/90 items-end text-lg mb-16 -mt-8 ml-8 ${className}`}>
+        <div className={` text-slate-800/90 items-end text-lg mb-16 mx-8 ${className}`}>
             <div className="flex my-1 flex-grow">
                 <div className="relative z-5 flex gap-6 ml-16 flex-grow flex-wrap bg-slate-400/80 p-4 rounded-lg">
                     <Link href="./">

@@ -21,6 +21,9 @@ export default {
     extend: {
       fontFamily: {
         'lemonmilk': ['LEMONMILK', 'sans-serif'],
+        'henotica': ['Henotica', 'sans'],
+        'shoal': 'Shoal',
+        'creatodisplay': 'CreatoDisplay'
       },
       colors: {
         background: "var(--background)",

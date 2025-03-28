@@ -6,7 +6,7 @@ export default function RootLayout({ children }) {
 
   const backgroundStyle =
   {
-    backgroundImage: "url('/bg-01.png')",
+    backgroundImage: "url('/ui/bg.png')",
     backgroundSize: "contain",
     backgroundPosition: "center",
   };
@@ -14,10 +14,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <div className="bg-sky-400/30">
+        <div className="bg-stone-400/50" style={{
+
+          //backgroundColor: "#b1f8ff" 
+
+          //backgroundImage: "url('/ui/white-bg.jpg')",
+          //backgroundSize: "contain",
+          //backgroundPosition: "center",
+        }}>
           <Header />
           <div
-            className="fixed container flex flex-col left-[10vw] h-[100vw] md:rounded-full sm:overflow-clip md:overflow-visible"
+            className="fixed z-0 container h-[100vw] md:rounded-full sm:overflow-clip md:overflow-visible"
             style={backgroundStyle}
           >
           </div>

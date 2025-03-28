@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { CardContainer, CardBody, CardItem } from "@/components/Card3D";
 import { ActionButton } from "@/components/ActionButton";
+import { getProductById } from "@/lib/api";
 
 export default function Product({ params }) {
   const [product, setProduct] = useState([]);
@@ -15,11 +16,7 @@ export default function Product({ params }) {
 
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/Products/${id}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await getProductById(id);
         setProduct(data);
       } catch (err) {
         setError(err);
