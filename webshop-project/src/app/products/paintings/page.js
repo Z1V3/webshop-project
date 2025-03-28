@@ -1,27 +1,24 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
+import { getPaintings } from "@/lib/api";
 import { useEffect, useState } from "react";
 
-export default function DecorationsPage() {
+export default function PaintingsPage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchDecorations = async () => {
+    const fetchPaintings = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/Products/Decorations");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await getPaintings();
         setProducts(data);
       } catch (err) {
         setError(err);
       }
     };
 
-    fetchDecorations();
+    fetchPaintings();
   }, []);
 
   if (error) {

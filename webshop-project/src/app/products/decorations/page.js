@@ -1,27 +1,24 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
+import { getDecorations } from "@/lib/api";
 import { useEffect, useState } from "react";
 
-export default function WearablesPage() {
+export default function DecorationsPage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchWearables = async () => {
+    const fetchDecorations = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/Products/Wearables");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await getDecorations();
         setProducts(data);
       } catch (err) {
         setError(err);
       }
     };
 
-    fetchWearables();
+    fetchDecorations();
   }, []);
 
   if (error) {
