@@ -41,6 +41,16 @@ namespace WebshopAPI.Controllers
             return product;
         }
 
+        // GET: api/Products/Random/3
+        [HttpGet("Random/{num}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetRandomEfficient(int num)
+        {
+            var products = await _context.Products
+                .FromSqlRaw("SELECT TOP ({0}) * FROM Product ORDER BY NEWID()", num)
+                .ToListAsync();
+            return products;
+        }
+
         // GET: api/Products/Paintings
         [HttpGet("Paintings")]
         public async Task<ActionResult<IEnumerable<Product>>> GetPaintings()
