@@ -22,12 +22,41 @@ namespace WebshopAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
+            string? sortBy = null,
+            string? order = "asc")
         {
-            return await _context.Products.ToListAsync();
+            IQueryable<Product> products = _context.Products;
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                sortBy = sortBy.ToLower();
+
+                switch (sortBy)
+                {
+                    case "name":
+                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Name) : products.OrderBy(p => p.Name);
+                        break;
+                    case "price":
+                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Price) : products.OrderBy(p => p.Price);
+                        break;
+                    case "type":
+                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.ProductTypeId) : products.OrderBy(p => p.ProductTypeId);
+                        break;
+                    default:
+                        return BadRequest($"Invalid sortBy parameter: {sortBy}. Allowed values are 'name', 'price', and 'type'.");
+                }
+            }
+            else
+            {
+                products = products.OrderBy(p => p.Name); // Example default sort by name
+            }
+
+            return await products.ToListAsync();
         }
 
-        // GET: api/Products/5
+
+        // GET: api/Products/5f 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
