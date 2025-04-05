@@ -13,30 +13,32 @@ export const ProductCard = ({
   };
 
   return (
-    <Link href={`/product/${id}`} className="hover:scale-95 duration-100">
-      <div className="flex flex-col gap-2 bg-[#363636]/95 p-2 sm:rounded-md md:rounded-lg text-white w-[12vw]">
-        <div className="bg-[#f0faff]/20 rounded-lg relative z-0 overflow-hidden w-full">
+    <Link href={`/product/${id}`} className="flex justify-center hover:rotate-1 duration-1000">
+      <div className="px-1 py-2 bg-stone-400/90 sm:rounded-md md:rounded-lg border-4 border-black/50">
+        <div className="relative flex flex-col bg-[#363636]/95 p-2 sm:rounded-md md:rounded-lg text-white min-w-[20vw] h-[30vw]">
           <div
-            className="absolute inset-0 -z-10 opacity-10"
+            className="absolute inset-0 z-1 opacity-10"
             style={{
               backgroundImage: `url(${grainImage.src})`,
             }}
           ></div>
-
-          <div className="p-2">
-            {imagePath && (
-              <img
-                src={imagePath}
-                alt={name}
-                className="object-contain w-full sm:rounded-sm md:rounded-md mb-2 object-center"
-                onError={handleImageError}
-              />
-            )}
+          <div className="relative w-full h-full bg-[#f0faff]/20 rounded-lg overflow-hidden">
+            <img
+              src={imagePath}
+              alt={name}
+              className="absolute h-full w-full object-cover"
+              onError={handleImageError}
+            />
           </div>
-          {name && <h2 className="md:text-sm lg:text-md font-thin mb-2 mt-1 ml-5">{name}</h2>}
+
+          <div className="relative z-10 flex justify-center mt-4 px-2 border-4 border-stone-400">
+            {name && <h2 className="text-lg font-thin">{name}</h2>}
+          </div>
+          <div className="relative z-10 mt-2 px-2">
+            {price && <p className="text-xl font-bold">{price} €</p>}
+            {children}
+          </div>
         </div>
-        {price && <p className="text-lg font-bold mb-2 ml-5">{price} €</p>}
-        {children}
       </div>
     </Link>
   );

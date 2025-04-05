@@ -44,14 +44,14 @@ export default function Register() {
 
   return (
     <div className="relative z-10 flex justify-center">
-      <div className="flex flex-col items-center justify-center bg-gray-700/80 hover:shadow-2xl duration-500 rounded-lg">
-        <div className="mt-48 mx-32">
+      <div className="flex flex-col items-center justify-center bg-gray-700/80 hover:shadow-2xl duration-500 rounded-lg ring-8">
+        <div className="mt-32 mx-24">
           <div className="flex justify-center mb-8">
             <h1 className="text-6xl text-white shadow-2xl bg-gray-700/20">Register</h1>
           </div>
           <form onSubmit={handleRegister} className="flex flex-col items-center gap-4 sm:w-[300px] md:w-[500px]">
             <div className="w-full group">
-              <label htmlFor="email" className="block text-md font-medium text-gray-700 group-hover:text-white duration-300">
+              <label htmlFor="email" className="block text-md font-medium text-gray-900/60 group-hover:text-white duration-300">
                 Email
               </label>
               <input
@@ -65,7 +65,7 @@ export default function Register() {
               />
             </div>
             <div className="w-full group">
-              <label htmlFor="password" className="block text-md font-medium text-gray-700 group-hover:text-white duration-300">
+              <label htmlFor="password" className="block text-md font-medium text-gray-900/60 group-hover:text-white duration-300">
                 Password
               </label>
               <input
@@ -79,7 +79,7 @@ export default function Register() {
               />
             </div>
             <div className="w-full group">
-              <label htmlFor="confirmedPassword" className="block text-md font-medium text-gray-700 group-hover:text-white duration-300">
+              <label htmlFor="confirmedPassword" className="block text-md font-medium text-gray-900/60 group-hover:text-white duration-300">
                 Confirm Password
               </label>
               <input
@@ -93,7 +93,7 @@ export default function Register() {
               />
             </div>
             <div className="w-full group">
-              <label htmlFor="phoneNumber" className="block text-md font-medium text-gray-700 group-hover:text-white duration-300">
+              <label htmlFor="phoneNumber" className="block text-md font-medium text-gray-900/60 group-hover:text-white duration-300">
                 Phone number
               </label>
               <input

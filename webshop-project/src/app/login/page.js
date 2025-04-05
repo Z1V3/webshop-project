@@ -54,8 +54,8 @@ export default function Login() {
           <h3 className="flex justify-center text-xl text-gray-100/70 mb-2">Sign in with Credentials</h3>
           <form onSubmit={handleCredentialsLogin} className="flex flex-col items-center gap-4 sm:w-[300px] md:w-[500px]">
             {error && <p className="text-red-500">{error}</p>}
-            <div className="w-full hover:text-white duration-300">
-              <label htmlFor="email" className="block text-lg font-medium">
+            <div className="w-full group">
+              <label htmlFor="email" className="block text-lg font-medium group-hover:text-white duration-300">
                 Email
               </label>
               <input
@@ -68,8 +68,8 @@ export default function Login() {
                 required
               />
             </div>
-            <div className="w-full hover:text-white duration-300">
-              <label htmlFor="password" className="block text-lg font-medium">
+            <div className="w-full group">
+              <label htmlFor="password" className="block text-lg font-medium group-hover:text-white duration-300">
                 Password
               </label>
               <input
