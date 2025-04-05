@@ -8,7 +8,7 @@ export default async function Header() {
 
   return (
     <div>
-      <PhoneHeader className="md:hidden" />
+      <PhoneHeader className="md:hidden"/>
       <DesktopHeader
         session={session}
         loginAction={loginAction}
