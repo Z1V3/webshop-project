@@ -24,6 +24,16 @@
     "Order": 0,
     "Parameters": [
       {
+        "Name": "price",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "sortBy",
         "Type": "System.String",
         "IsRequired": false

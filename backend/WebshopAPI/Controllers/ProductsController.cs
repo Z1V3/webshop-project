@@ -23,40 +23,57 @@ namespace WebshopAPI.Controllers
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
+            string? price = null,
+            string? type = null,
             string? sortBy = null,
             string? order = "asc")
         {
             IQueryable<Product> products = _context.Products;
 
+
+            // Filter by category
+            if (!string.IsNullOrEmpty(type))
+            {
+                switch (type)
+                {
+                    case "paintings":
+                        type = "1";
+                        break;
+                    case "decorations":
+                        type = "2";
+                        break;
+                    case "wearables":
+                        type = "3";
+                        break;
+                }
+                products = products.Where(p => p.ProductTypeId == Int32.Parse(type));
+            }
+
+            // Additional filters
+            if (!string.IsNullOrEmpty(price))
+            {
+                products = products.Where(p => p.Price <= Int32.Parse(price));
+            }
+
+            // Sorting
             if (!string.IsNullOrEmpty(sortBy))
             {
                 sortBy = sortBy.ToLower();
-
-                switch (sortBy)
+                products = sortBy switch
                 {
-                    case "name":
-                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Name) : products.OrderBy(p => p.Name);
-                        break;
-                    case "price":
-                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Price) : products.OrderBy(p => p.Price);
-                        break;
-                    case "type":
-                        products = order?.ToLower() == "desc" ? products.OrderByDescending(p => p.ProductTypeId) : products.OrderBy(p => p.ProductTypeId);
-                        break;
-                    default:
-                        return BadRequest($"Invalid sortBy parameter: {sortBy}. Allowed values are 'name', 'price', and 'type'.");
-                }
-            }
-            else
-            {
-                products = products.OrderBy(p => p.Name); // Example default sort by name
+                    "name" => order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Name) : products.OrderBy(p => p.Name),
+                    "price" => order?.ToLower() == "desc" ? products.OrderByDescending(p => p.Price) : products.OrderBy(p => p.Price),
+                    "type" => order?.ToLower() == "desc" ? products.OrderByDescending(p => p.ProductTypeId) : products.OrderBy(p => p.ProductTypeId),
+                    _ => products
+                };
             }
 
             return await products.ToListAsync();
         }
 
 
-        // GET: api/Products/5f 
+
+        // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
