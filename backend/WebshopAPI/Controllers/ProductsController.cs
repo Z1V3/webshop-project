@@ -26,7 +26,8 @@ namespace WebshopAPI.Controllers
             string? price = null,
             string? type = null,
             string? sortBy = null,
-            string? order = "asc")
+            string? order = "asc",
+            string? search = null)
         {
             IQueryable<Product> products = _context.Products;
 
@@ -53,6 +54,11 @@ namespace WebshopAPI.Controllers
             if (!string.IsNullOrEmpty(price))
             {
                 products = products.Where(p => p.Price <= Int32.Parse(price));
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.Contains(search));
             }
 
             // Sorting

@@ -33,7 +33,7 @@ export default function Login() {
 
   return (
     <div className="relative z-10 flex justify-center">
-      <div className="flex flex-col items-center justify-center bg-gray-700/80 hover:shadow-2xl duration-500 rounded-lg">
+      <div className="flex flex-col items-center justify-center bg-gray-700/80 hover:shadow-2xl duration-500 rounded-lg ring-8">
         <div className="mt-48 mx-32">
           <div className="flex justify-center mb-8">
             <h1 className="text-6xl text-white shadow-2xl bg-gray-700/20">Login</h1>

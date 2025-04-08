@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PhoneProductDisplay } from "../product_display/PhoneProductDisplay";
-import { SearchBar } from "../SearchBar";
+import { PhoneSearchBarHome } from "../PhoneSearchBarHome";
 
 export const PhoneHome = () => {
     return (
@@ -29,7 +29,7 @@ export const PhoneHome = () => {
             </div>
 
             <div className="relative mb-16 w-10/12">
-                <SearchBar />
+                <PhoneSearchBarHome />
             </div>
 
             <div className="relative w-10/12 overflow-hidden">

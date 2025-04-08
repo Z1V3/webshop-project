@@ -4,20 +4,33 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { NavComponent } from "../NavComponent";
 import { cn } from "@/lib/utils";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaSearch, FaTimes, FaCheck } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export const DesktopHeader = ({ session, className }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
   const handleCloseSearch = () => {
     setIsSearchOpen(false);
     setSearchTerm("");
   };
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleSearchSubmit = () => {
+    if (searchTerm) {
+      router.push(`/products?search=${encodeURIComponent(searchTerm)}`);
+      setIsSearchOpen(false);
+      setSearchTerm("");
+    }
   };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearchSubmit();
+    }
+  };
+
 
   return (
     <div className={cn(`min-h-[15vh] text-white items-end mb-16`, className)}>
@@ -32,13 +45,20 @@ export const DesktopHeader = ({ session, className }) => {
           placeholder="Search..."
           className="w-3/4 p-3 rounded-md text-black outline-none"
           value={searchTerm}
-          onChange={handleInputChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <button
           onClick={handleCloseSearch}
           className="ml-4 text-white hover:opacity-75"
         >
           <FaTimes color="#918f87" size={30} />
+        </button>
+        <button
+          onClick={handleSearchSubmit}
+          className="ml-4 text-white hover:opacity-75"
+        >
+          <FaCheck color="#918f87" size={30} />
         </button>
       </motion.div>
 

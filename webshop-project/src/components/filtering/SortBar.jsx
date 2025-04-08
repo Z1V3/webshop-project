@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"; // Import FaArrowUp
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 export const SortBar = ({ className }) => {
   const router = useRouter();

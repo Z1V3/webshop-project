@@ -70,6 +70,13 @@
               "type": "string",
               "default": "asc"
             }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
